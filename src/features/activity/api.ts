@@ -26,3 +26,21 @@ export async function listActivity(
   if (error) throw fromDatabaseError(error);
   return z.array(activitySchema).parse(data);
 }
+
+const PAGE_SIZE = 1000;
+
+export async function listAllActivity(client: SupabaseClient, workspaceId: string): Promise<Activity[]> {
+  const rows: Activity[] = [];
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data, error } = await client
+      .from("activity")
+      .select(COLUMNS)
+      .eq("workspace_id", workspaceId)
+      .order("id", { ascending: true })
+      .range(from, from + PAGE_SIZE - 1);
+    if (error) throw fromDatabaseError(error);
+    const page = z.array(activitySchema).parse(data);
+    rows.push(...page);
+    if (page.length < PAGE_SIZE) return rows;
+  }
+}
