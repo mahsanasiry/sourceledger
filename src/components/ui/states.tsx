@@ -5,7 +5,7 @@ import { Spinner } from "./spinner";
 
 export function LoadingState({ label = "Loading" }: { label?: string }) {
   return (
-    <div className="flex items-center justify-center gap-3 p-10 text-sm text-ink-muted">
+    <div className="text-ink-muted flex items-center justify-center gap-3 p-10 text-sm">
       <Spinner label={label} />
       <span>{label}</span>
     </div>
@@ -22,9 +22,9 @@ export function ErrorState({
   title?: string;
 }) {
   return (
-    <div role="alert" className="rounded-lg border border-contradict bg-contradict-soft p-5">
-      <h2 className="text-sm font-semibold text-contradict">{title}</h2>
-      <p className="mt-1 text-sm text-ink">{toUserMessage(error)}</p>
+    <div role="alert" className="border-contradict bg-contradict-soft rounded-lg border p-5">
+      <h2 className="text-contradict text-sm font-semibold">{title}</h2>
+      <p className="text-ink mt-1 text-sm">{toUserMessage(error)}</p>
       {onRetry ? (
         <Button variant="secondary" className="mt-3" onClick={onRetry}>
           Try again
@@ -44,9 +44,9 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-dashed border-line p-8 text-center">
+    <div className="border-line rounded-lg border border-dashed p-8 text-center">
       <h2 className="text-base font-semibold">{title}</h2>
-      <p className="mx-auto mt-1 max-w-md text-sm text-ink-muted">{description}</p>
+      <p className="text-ink-muted mx-auto mt-1 max-w-md text-sm">{description}</p>
       {action ? <div className="mt-4 flex justify-center">{action}</div> : null}
     </div>
   );
@@ -55,7 +55,7 @@ export function EmptyState({
 export function InlineError({ message }: { message: string | null }) {
   if (!message) return null;
   return (
-    <p role="alert" className="rounded-md bg-contradict-soft px-3 py-2 text-sm text-contradict">
+    <p role="alert" className="bg-contradict-soft text-contradict rounded-md px-3 py-2 text-sm">
       {message}
     </p>
   );

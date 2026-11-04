@@ -6,7 +6,13 @@ export const ROWS_PER_COLUMN = 24;
 
 export type GraphNodeData =
   | { kind: "claim"; entityId: string; label: string; status: Claim["status"] }
-  | { kind: "source"; entityId: string; label: string; review: Source["review_status"]; flagged: boolean };
+  | {
+      kind: "source";
+      entityId: string;
+      label: string;
+      review: Source["review_status"];
+      flagged: boolean;
+    };
 
 export type GraphNode = { id: string; x: number; y: number; data: GraphNodeData };
 export type GraphEdge = { id: string; from: string; to: string; relation: Relation };
@@ -82,7 +88,10 @@ export function buildGraphLayout(
 
   const nodeIds = new Set(nodes.map((node) => node.id));
   const edges: GraphEdge[] = visibleLinks
-    .filter((link) => nodeIds.has(claimNodeId(link.claim_id)) && nodeIds.has(sourceNodeId(link.source_id)))
+    .filter(
+      (link) =>
+        nodeIds.has(claimNodeId(link.claim_id)) && nodeIds.has(sourceNodeId(link.source_id)),
+    )
     .map((link) => ({
       id: `${link.claim_id}:${link.source_id}`,
       from: claimNodeId(link.claim_id),

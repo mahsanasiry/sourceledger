@@ -26,31 +26,50 @@ describe("form schemas", () => {
   });
 
   it("rejects non-http addresses and impossible dates", () => {
-    expect(sourceFormSchema.safeParse({ ...validSource, url: "javascript:alert(1)" }).success).toBe(false);
+    expect(sourceFormSchema.safeParse({ ...validSource, url: "javascript:alert(1)" }).success).toBe(
+      false,
+    );
     expect(sourceFormSchema.safeParse({ ...validSource, url: "example.org" }).success).toBe(false);
-    expect(sourceFormSchema.safeParse({ ...validSource, published_on: "2024-13-45" }).success).toBe(false);
+    expect(sourceFormSchema.safeParse({ ...validSource, published_on: "2024-13-45" }).success).toBe(
+      false,
+    );
   });
 
   it("requires a reason when changing review status", () => {
-    expect(reviewFormSchema.safeParse({ review_status: "verified", reason: " " }).success).toBe(false);
-    expect(reviewFormSchema.safeParse({ review_status: "verified", reason: "Checked appendix" }).success).toBe(true);
+    expect(reviewFormSchema.safeParse({ review_status: "verified", reason: " " }).success).toBe(
+      false,
+    );
+    expect(
+      reviewFormSchema.safeParse({ review_status: "verified", reason: "Checked appendix" }).success,
+    ).toBe(true);
   });
 
   it("trims claim statements before measuring them", () => {
-    const result = claimFormSchema.safeParse({ statement: "   ", conclusion: "", status: "open", reason: "" });
+    const result = claimFormSchema.safeParse({
+      statement: "   ",
+      conclusion: "",
+      status: "open",
+      reason: "",
+    });
     expect(result.success).toBe(false);
   });
 
   it("validates email and password length", () => {
-    expect(authFormSchema.safeParse({ email: "not-an-email", password: "longenough" }).success).toBe(false);
+    expect(
+      authFormSchema.safeParse({ email: "not-an-email", password: "longenough" }).success,
+    ).toBe(false);
     expect(authFormSchema.safeParse({ email: "a@b.co", password: "short" }).success).toBe(false);
-    expect(authFormSchema.safeParse({ email: "a@b.co", password: "longenough" }).success).toBe(true);
+    expect(authFormSchema.safeParse({ email: "a@b.co", password: "longenough" }).success).toBe(
+      true,
+    );
   });
 });
 
 describe("utilities", () => {
   it("patches search params and drops empty values", () => {
-    expect(applyParamPatch("q=a&sort=title", { q: "", review: "verified" })).toBe("review=verified&sort=title");
+    expect(applyParamPatch("q=a&sort=title", { q: "", review: "verified" })).toBe(
+      "review=verified&sort=title",
+    );
   });
 
   it("maps database error codes to readable messages", () => {

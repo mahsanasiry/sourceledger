@@ -34,7 +34,9 @@ function useRefreshSources(workspaceId: string) {
 
 export class LinkAfterCreateError extends Error {
   constructor(readonly sourceId: string) {
-    super("The source was saved, but it could not be linked to the claim. Open it and link it again.");
+    super(
+      "The source was saved, but it could not be linked to the claim. Open it and link it again.",
+    );
     this.name = "LinkAfterCreateError";
   }
 }
@@ -66,7 +68,8 @@ export function useCreateSource(workspaceId: string) {
 export function useUpdateSource(workspaceId: string, sourceId: string) {
   const refresh = useRefreshSources(workspaceId);
   return useMutation({
-    mutationFn: (values: SourceFields) => updateSource(getSupabaseBrowserClient(), sourceId, values),
+    mutationFn: (values: SourceFields) =>
+      updateSource(getSupabaseBrowserClient(), sourceId, values),
     onSuccess: refresh,
   });
 }

@@ -20,7 +20,13 @@ type SourceCardProps = {
   onSelect: (sourceId: string) => void;
 };
 
-export function SourceCard({ source, relation, relationNote, selected, onSelect }: SourceCardProps) {
+export function SourceCard({
+  source,
+  relation,
+  relationNote,
+  selected,
+  onSelect,
+}: SourceCardProps) {
   return (
     <li>
       <button
@@ -28,20 +34,21 @@ export function SourceCard({ source, relation, relationNote, selected, onSelect 
         onClick={() => onSelect(source.id)}
         aria-current={selected ? "true" : undefined}
         className={cn(
-          "flex w-full flex-col gap-2 rounded-lg border bg-surface p-3 text-left transition hover:border-accent",
-          selected ? "border-accent ring-2 ring-accent" : "border-line",
+          "bg-surface hover:border-accent flex w-full flex-col gap-2 rounded-lg border p-3 text-left transition",
+          selected ? "border-accent ring-accent ring-2" : "border-line",
         )}
       >
-        <span className="text-sm font-semibold leading-snug">{source.title}</span>
-        <span className="text-xs text-ink-muted">
-          {hostOf(source.url)} · {formatDate(source.published_on)} · {SOURCE_TYPE_LABELS[source.source_type]}
+        <span className="text-sm leading-snug font-semibold">{source.title}</span>
+        <span className="text-ink-muted text-xs">
+          {hostOf(source.url)} · {formatDate(source.published_on)} ·{" "}
+          {SOURCE_TYPE_LABELS[source.source_type]}
         </span>
         <span className="flex flex-wrap gap-1.5">
           {relation ? <RelationBadge relation={relation} /> : null}
           <ReviewBadge status={source.review_status} />
           {source.flagged ? <FlagBadge /> : null}
         </span>
-        {relationNote ? <span className="text-xs text-ink-muted">{relationNote}</span> : null}
+        {relationNote ? <span className="text-ink-muted text-xs">{relationNote}</span> : null}
       </button>
     </li>
   );

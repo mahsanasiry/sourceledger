@@ -29,7 +29,7 @@ export function Modal({ open, title, onClose, children }: ModalProps) {
         event.preventDefault();
         onClose();
       }}
-      className="m-auto w-[min(40rem,calc(100vw-2rem))] max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-xl border border-line bg-surface p-0 text-ink shadow-xl backdrop:bg-black/50"
+      className="border-line bg-surface text-ink m-auto max-h-[calc(100dvh-2rem)] w-[min(40rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border p-0 shadow-xl backdrop:bg-black/50"
     >
       {open ? (
         <div className="p-6">

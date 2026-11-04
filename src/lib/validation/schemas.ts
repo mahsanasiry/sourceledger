@@ -88,7 +88,11 @@ const optionalText = (max: number) =>
   z.string().trim().max(max, `Keep this under ${max} characters`);
 
 export const workspaceFormSchema = z.object({
-  name: z.string().trim().min(1, "Give the workspace a name").max(120, "Keep the name under 120 characters"),
+  name: z
+    .string()
+    .trim()
+    .min(1, "Give the workspace a name")
+    .max(120, "Keep the name under 120 characters"),
   description: optionalText(2000),
 });
 export type WorkspaceFormValues = z.infer<typeof workspaceFormSchema>;
@@ -121,11 +125,18 @@ const httpUrl = z
 
 export const sourceFormSchema = z.object({
   url: httpUrl,
-  title: z.string().trim().min(1, "Give the source a title").max(300, "Keep the title under 300 characters"),
+  title: z
+    .string()
+    .trim()
+    .min(1, "Give the source a title")
+    .max(300, "Keep the title under 300 characters"),
   published_on: z
     .string()
     .trim()
-    .refine((value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value), "Use the format YYYY-MM-DD")
+    .refine(
+      (value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value),
+      "Use the format YYYY-MM-DD",
+    )
     .refine((value) => value === "" || !Number.isNaN(Date.parse(value)), "That is not a real date"),
   source_type: z.enum(SOURCE_TYPES),
   excerpt: optionalText(5000),

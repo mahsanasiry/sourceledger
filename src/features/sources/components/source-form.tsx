@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { RELATION_LABELS } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SelectField, TextAreaField, TextField } from "@/components/ui/field";
@@ -59,13 +59,14 @@ export function SourceForm({
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm<SourceFormValues>({
     resolver: zodResolver(sourceFormSchema),
     defaultValues: initialValues,
   });
-  const linking = mode === "create" && watch("claim_id") !== "";
+  const chosenClaim = useWatch({ control, name: "claim_id" });
+  const linking = mode === "create" && chosenClaim !== "";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
@@ -101,9 +102,14 @@ export function SourceForm({
         error={errors.excerpt?.message}
         {...register("excerpt")}
       />
-      <TextAreaField label="Your note" rows={2} error={errors.note?.message} {...register("note")} />
+      <TextAreaField
+        label="Your note"
+        rows={2}
+        error={errors.note?.message}
+        {...register("note")}
+      />
       {mode === "create" ? (
-        <fieldset className="grid gap-4 rounded-md border border-line p-4 sm:grid-cols-2">
+        <fieldset className="border-line grid gap-4 rounded-md border p-4 sm:grid-cols-2">
           <legend className="px-1 text-sm font-medium">Link to a claim (optional)</legend>
           <SelectField label="Claim" {...register("claim_id")}>
             <option value="">Do not link yet</option>

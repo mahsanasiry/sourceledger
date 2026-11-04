@@ -40,16 +40,16 @@ const GraphNodeView = memo(function GraphNodeView({ data, selected }: NodeProps<
   return (
     <div
       className={cn(
-        "w-64 rounded-lg border-2 bg-surface px-3 py-2 text-left text-xs shadow-sm",
+        "bg-surface w-64 rounded-lg border-2 px-3 py-2 text-left text-xs shadow-sm",
         isClaim ? "border-accent" : data.kind === "source" ? REVIEW_RING[data.review] : "",
-        selected ? "ring-2 ring-focus" : "",
+        selected ? "ring-focus ring-2" : "",
       )}
     >
       <Handle type="target" position={Position.Left} isConnectable={false} className="opacity-0" />
-      <p className="mb-0.5 font-semibold uppercase tracking-wide text-ink-muted">
+      <p className="text-ink-muted mb-0.5 font-semibold tracking-wide uppercase">
         {isClaim ? "Claim" : data.kind === "source" && data.flagged ? "Source · flagged" : "Source"}
       </p>
-      <p className="line-clamp-2 text-sm font-medium leading-snug">{data.label}</p>
+      <p className="line-clamp-2 text-sm leading-snug font-medium">{data.label}</p>
       <Handle type="source" position={Position.Right} isConnectable={false} className="opacity-0" />
     </div>
   );
@@ -100,7 +100,7 @@ export function EvidenceGraph({
   }, [claims, sources, links, filter, selectedSourceId]);
 
   return (
-    <div className="h-[70vh] min-h-96 rounded-lg border border-line bg-surface">
+    <div className="border-line bg-surface h-[70vh] min-h-96 rounded-lg border">
       <ReactFlow
         nodes={nodes}
         edges={edges}

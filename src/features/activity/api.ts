@@ -29,7 +29,10 @@ export async function listActivity(
 
 const PAGE_SIZE = 1000;
 
-export async function listAllActivity(client: SupabaseClient, workspaceId: string): Promise<Activity[]> {
+export async function listAllActivity(
+  client: SupabaseClient,
+  workspaceId: string,
+): Promise<Activity[]> {
   const rows: Activity[] = [];
   for (let from = 0; ; from += PAGE_SIZE) {
     const { data, error } = await client

@@ -80,13 +80,13 @@ function matchesText(source: Source, needle: string): boolean {
 export function filterSources<T extends Source>(
   sources: readonly T[],
   query: SourceQuery,
-  relationOf?: (source: T) => Relation | undefined,
+  relationsOf?: (source: T) => readonly Relation[],
 ): T[] {
   return sources.filter((source) => {
     if (query.review && source.review_status !== query.review) return false;
     if (query.type && source.source_type !== query.type) return false;
     if (query.flagged && !source.flagged) return false;
-    if (query.relation && relationOf?.(source) !== query.relation) return false;
+    if (query.relation && !relationsOf?.(source).includes(query.relation)) return false;
     return matchesText(source, query.q.trim());
   });
 }
@@ -104,7 +104,9 @@ export function sortSources<T extends Source>(sources: readonly T[], sort: SortO
         return b.published_on.localeCompare(a.published_on);
       });
     case "title":
-      return copy.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }));
+      return copy.sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
+      );
     case "review":
       return copy.sort(
         (a, b) =>

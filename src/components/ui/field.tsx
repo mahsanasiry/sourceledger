@@ -15,7 +15,11 @@ type FieldShellProps = {
   label: string;
   error?: string;
   hint?: string;
-  children: (ids: { controlId: string; describedBy: string | undefined; invalid: boolean }) => ReactNode;
+  children: (ids: {
+    controlId: string;
+    describedBy: string | undefined;
+    invalid: boolean;
+  }) => ReactNode;
 };
 
 function FieldShell({ label, error, hint, children }: FieldShellProps) {
@@ -31,12 +35,12 @@ function FieldShell({ label, error, hint, children }: FieldShellProps) {
       </label>
       {children({ controlId, describedBy: describedBy || undefined, invalid: Boolean(error) })}
       {hint ? (
-        <p id={hintId} className="text-xs text-ink-muted">
+        <p id={hintId} className="text-ink-muted text-xs">
           {hint}
         </p>
       ) : null}
       {error ? (
-        <p id={errorId} className="text-xs font-medium text-contradict">
+        <p id={errorId} className="text-contradict text-xs font-medium">
           {error}
         </p>
       ) : null}
@@ -46,24 +50,25 @@ function FieldShell({ label, error, hint, children }: FieldShellProps) {
 
 type CommonProps = { label: string; error?: string; hint?: string };
 
-export const TextField = forwardRef<HTMLInputElement, CommonProps & InputHTMLAttributes<HTMLInputElement>>(
-  function TextField({ label, error, hint, className, ...props }, ref) {
-    return (
-      <FieldShell label={label} error={error} hint={hint}>
-        {({ controlId, describedBy, invalid }) => (
-          <input
-            ref={ref}
-            id={controlId}
-            aria-describedby={describedBy}
-            aria-invalid={invalid || undefined}
-            className={cn(CONTROL, className)}
-            {...props}
-          />
-        )}
-      </FieldShell>
-    );
-  },
-);
+export const TextField = forwardRef<
+  HTMLInputElement,
+  CommonProps & InputHTMLAttributes<HTMLInputElement>
+>(function TextField({ label, error, hint, className, ...props }, ref) {
+  return (
+    <FieldShell label={label} error={error} hint={hint}>
+      {({ controlId, describedBy, invalid }) => (
+        <input
+          ref={ref}
+          id={controlId}
+          aria-describedby={describedBy}
+          aria-invalid={invalid || undefined}
+          className={cn(CONTROL, className)}
+          {...props}
+        />
+      )}
+    </FieldShell>
+  );
+});
 
 export const TextAreaField = forwardRef<
   HTMLTextAreaElement,

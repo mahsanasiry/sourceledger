@@ -25,7 +25,13 @@ type SourceDetailPanelProps = {
   onClose: () => void;
 };
 
-export function SourceDetailPanel({ workspaceId, source, claims, links, onClose }: SourceDetailPanelProps) {
+export function SourceDetailPanel({
+  workspaceId,
+  source,
+  claims,
+  links,
+  onClose,
+}: SourceDetailPanelProps) {
   const toast = useToast();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [editing, setEditing] = useState(false);
@@ -55,7 +61,7 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
       onKeyDown={(event) => {
         if (event.key === "Escape" && !editing) onClose();
       }}
-      className="flex flex-col gap-5 rounded-lg border border-line bg-surface p-5"
+      className="border-line bg-surface flex flex-col gap-5 rounded-lg border p-5"
     >
       <header className="flex items-start justify-between gap-3">
         <div>
@@ -63,7 +69,7 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
             id="source-panel-title"
             ref={headingRef}
             tabIndex={-1}
-            className="text-lg font-semibold leading-snug outline-none"
+            className="text-lg leading-snug font-semibold outline-none"
           >
             {source.title}
           </h2>
@@ -71,7 +77,7 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
             href={source.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-1 inline-block break-all text-sm text-accent underline"
+            className="text-accent mt-1 inline-block text-sm break-all underline"
           >
             {hostOf(source.url)}
             <span className="sr-only"> (opens in a new tab)</span>
@@ -89,11 +95,13 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
 
       <dl className="grid grid-cols-2 gap-3 text-sm">
         <div>
-          <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Published</dt>
+          <dt className="text-ink-muted text-xs font-semibold tracking-wide uppercase">
+            Published
+          </dt>
           <dd>{formatDate(source.published_on)}</dd>
         </div>
         <div>
-          <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Type</dt>
+          <dt className="text-ink-muted text-xs font-semibold tracking-wide uppercase">Type</dt>
           <dd>{SOURCE_TYPE_LABELS[source.source_type]}</dd>
         </div>
       </dl>
@@ -103,9 +111,13 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
           What the source says
         </h3>
         {source.excerpt ? (
-          <blockquote className="mt-1 border-l-4 border-line pl-3 text-sm">{source.excerpt}</blockquote>
+          <blockquote className="border-line mt-1 border-l-4 pl-3 text-sm">
+            {source.excerpt}
+          </blockquote>
         ) : (
-          <p className="mt-1 text-sm text-ink-muted">No passage recorded. Edit the source to paste the exact wording.</p>
+          <p className="text-ink-muted mt-1 text-sm">
+            No passage recorded. Edit the source to paste the exact wording.
+          </p>
         )}
       </section>
 
@@ -113,7 +125,7 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
         <h3 id="source-note" className="text-sm font-semibold">
           Your note
         </h3>
-        <p className="mt-1 whitespace-pre-wrap text-sm">{source.note || "No note yet."}</p>
+        <p className="mt-1 text-sm whitespace-pre-wrap">{source.note || "No note yet."}</p>
       </section>
 
       <div className="flex flex-wrap gap-2">
@@ -140,7 +152,7 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
         </Button>
       </div>
 
-      <section aria-labelledby="source-review" className="rounded-md border border-line p-4">
+      <section aria-labelledby="source-review" className="border-line rounded-md border p-4">
         <h3 id="source-review" className="mb-3 text-sm font-semibold">
           Review
         </h3>
@@ -155,12 +167,12 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
         />
       </section>
 
-      <section aria-labelledby="source-links" className="rounded-md border border-line p-4">
+      <section aria-labelledby="source-links" className="border-line rounded-md border p-4">
         <h3 id="source-links" className="mb-3 text-sm font-semibold">
           Linked claims
         </h3>
         {sourceLinks.length === 0 ? (
-          <p className="mb-3 text-sm text-ink-muted">This source is not linked to any claim yet.</p>
+          <p className="text-ink-muted mb-3 text-sm">This source is not linked to any claim yet.</p>
         ) : (
           <ul className="mb-4 flex flex-col gap-2">
             {sourceLinks.map((entry) => (
@@ -169,7 +181,9 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
                   <RelationBadge relation={entry.relation} />{" "}
                   <span>{claimById.get(entry.claim_id)?.statement ?? "Deleted claim"}</span>
                   {entry.relation_note ? (
-                    <span className="mt-0.5 block text-xs text-ink-muted">{entry.relation_note}</span>
+                    <span className="text-ink-muted mt-0.5 block text-xs">
+                      {entry.relation_note}
+                    </span>
                   ) : null}
                 </span>
                 <Button
@@ -195,7 +209,9 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
           claims={claims}
           submitting={link.isPending}
           error={link.error}
-          onSubmit={(values) => link.mutate(values, { onSuccess: () => toast.success("Link saved") })}
+          onSubmit={(values) =>
+            link.mutate(values, { onSuccess: () => toast.success("Link saved") })
+          }
         />
       </section>
 
@@ -234,15 +250,24 @@ export function SourceDetailPanel({ workspaceId, source, claims, links, onClose 
         />
       </Modal>
 
-      <Modal open={confirmingDelete} title="Delete this source?" onClose={() => setConfirmingDelete(false)}>
+      <Modal
+        open={confirmingDelete}
+        title="Delete this source?"
+        onClose={() => setConfirmingDelete(false)}
+      >
         <p className="text-sm">
-          The source and its links to claims will be removed. The deletion stays in the workspace history.
+          The source and its links to claims will be removed. The deletion stays in the workspace
+          history.
         </p>
         <div className="mt-4">
           <InlineError message={remove.error ? toUserMessage(remove.error) : null} />
         </div>
         <div className="mt-4 flex justify-end gap-2">
-          <Button variant="secondary" onClick={() => setConfirmingDelete(false)} disabled={remove.isPending}>
+          <Button
+            variant="secondary"
+            onClick={() => setConfirmingDelete(false)}
+            disabled={remove.isPending}
+          >
             Keep source
           </Button>
           <Button

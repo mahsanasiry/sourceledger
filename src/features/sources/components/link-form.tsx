@@ -22,7 +22,13 @@ type LinkFormProps = {
   initialClaimId?: string;
 };
 
-export function LinkForm({ claims, submitting, error, onSubmit, initialClaimId = "" }: LinkFormProps) {
+export function LinkForm({
+  claims,
+  submitting,
+  error,
+  onSubmit,
+  initialClaimId = "",
+}: LinkFormProps) {
   const {
     register,
     handleSubmit,

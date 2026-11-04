@@ -46,15 +46,19 @@ describe("filterSources", () => {
 
   it("combines review status, type and flag filters", () => {
     expect(filterSources(sources, { ...DEFAULT_SOURCE_QUERY, review: "verified" })).toHaveLength(1);
-    expect(filterSources(sources, { ...DEFAULT_SOURCE_QUERY, type: "news", flagged: true })).toHaveLength(1);
-    expect(filterSources(sources, { ...DEFAULT_SOURCE_QUERY, type: "news", review: "verified" })).toHaveLength(0);
+    expect(
+      filterSources(sources, { ...DEFAULT_SOURCE_QUERY, type: "news", flagged: true }),
+    ).toHaveLength(1);
+    expect(
+      filterSources(sources, { ...DEFAULT_SOURCE_QUERY, type: "news", review: "verified" }),
+    ).toHaveLength(0);
   });
 
   it("filters by relation through the supplied lookup", () => {
     const result = filterSources(
       sources,
       { ...DEFAULT_SOURCE_QUERY, relation: "supports" },
-      (source) => (source.id === "a" ? "supports" : "context"),
+      (source) => (source.id === "a" ? ["supports", "context"] : ["context"]),
     );
     expect(result.map((source) => source.id)).toEqual(["a"]);
   });
@@ -63,8 +67,19 @@ describe("filterSources", () => {
 describe("sortSources", () => {
   const sources = [
     makeSource({ id: "a", title: "b", published_on: null, created_at: "2024-01-01T00:00:00Z" }),
-    makeSource({ id: "b", title: "a", published_on: "2023-01-01", created_at: "2024-03-01T00:00:00Z" }),
-    makeSource({ id: "c", title: "c", published_on: "2024-01-01", created_at: "2024-02-01T00:00:00Z", review_status: "rejected" }),
+    makeSource({
+      id: "b",
+      title: "a",
+      published_on: "2023-01-01",
+      created_at: "2024-03-01T00:00:00Z",
+    }),
+    makeSource({
+      id: "c",
+      title: "c",
+      published_on: "2024-01-01",
+      created_at: "2024-02-01T00:00:00Z",
+      review_status: "rejected",
+    }),
   ];
 
   it("sorts newest first by default", () => {

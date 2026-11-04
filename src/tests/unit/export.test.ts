@@ -22,7 +22,7 @@ describe("csv escaping", () => {
   });
 
   it("neutralises spreadsheet formulas", () => {
-    expect(escapeCsvCell("=HYPERLINK(\"x\")")).toBe('"\'=HYPERLINK(""x"")"');
+    expect(escapeCsvCell('=HYPERLINK("x")')).toBe('"\'=HYPERLINK(""x"")"');
     expect(escapeCsvCell("+1")).toBe("'+1");
   });
 

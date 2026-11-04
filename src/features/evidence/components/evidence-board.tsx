@@ -32,14 +32,22 @@ export function EvidenceBoard({ columns, selectedId, onSelect }: EvidenceBoardPr
           <section
             key={relation}
             aria-labelledby={headingId}
-            className={cn("rounded-lg border border-line border-t-4 bg-surface-muted p-3", COLUMN_STYLES[relation])}
+            className={cn(
+              "border-line bg-surface-muted rounded-lg border border-t-4 p-3",
+              COLUMN_STYLES[relation],
+            )}
           >
-            <h3 id={headingId} className="mb-3 flex items-center justify-between text-sm font-semibold">
+            <h3
+              id={headingId}
+              className="mb-3 flex items-center justify-between text-sm font-semibold"
+            >
               {RELATION_LABELS[relation]}
-              <span className="rounded-full bg-surface px-2 py-0.5 text-xs text-ink-muted">{items.length}</span>
+              <span className="bg-surface text-ink-muted rounded-full px-2 py-0.5 text-xs">
+                {items.length}
+              </span>
             </h3>
             {items.length === 0 ? (
-              <p className="px-1 py-4 text-sm text-ink-muted">{EMPTY_TEXT[relation]}</p>
+              <p className="text-ink-muted px-1 py-4 text-sm">{EMPTY_TEXT[relation]}</p>
             ) : (
               <ul className="flex flex-col gap-2">
                 {items.map((source) => (

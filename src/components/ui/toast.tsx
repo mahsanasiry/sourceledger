@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 type ToastTone = "success" | "error";
 type ToastMessage = { id: number; tone: ToastTone; text: string };
@@ -42,8 +50,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={message.id}
             className={
               message.tone === "success"
-                ? "pointer-events-auto rounded-md bg-support px-4 py-2 text-sm font-medium text-white shadow-lg"
-                : "pointer-events-auto rounded-md bg-contradict px-4 py-2 text-sm font-medium text-white shadow-lg"
+                ? "bg-support pointer-events-auto rounded-md px-4 py-2 text-sm font-medium text-white shadow-lg"
+                : "bg-contradict pointer-events-auto rounded-md px-4 py-2 text-sm font-medium text-white shadow-lg"
             }
           >
             {message.text}

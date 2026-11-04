@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { REVIEW_LABELS } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SelectField, TextAreaField } from "@/components/ui/field";
@@ -26,13 +26,14 @@ export function ReviewForm({ current, submitting, error, onSubmit }: ReviewFormP
     register,
     handleSubmit,
     reset,
-    watch,
+    control,
     formState: { errors },
   } = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewFormSchema),
     defaultValues: { review_status: current, reason: "" },
   });
-  const unchanged = watch("review_status") === current;
+  const chosen = useWatch({ control, name: "review_status" });
+  const unchanged = chosen === current;
 
   return (
     <form

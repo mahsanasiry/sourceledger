@@ -13,7 +13,9 @@ export function linkedSourcesForClaim(
   return links.flatMap((link) => {
     if (link.claim_id !== claimId) return [];
     const source = sourceById.get(link.source_id);
-    return source ? [{ ...source, relation: link.relation, relation_note: link.relation_note }] : [];
+    return source
+      ? [{ ...source, relation: link.relation, relation_note: link.relation_note }]
+      : [];
   });
 }
 

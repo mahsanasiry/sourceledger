@@ -69,7 +69,10 @@ export async function deleteClaim(client: SupabaseClient, claimId: string): Prom
   if (error) throw fromDatabaseError(error);
 }
 
-export async function listLinks(client: SupabaseClient, workspaceId: string): Promise<ClaimSource[]> {
+export async function listLinks(
+  client: SupabaseClient,
+  workspaceId: string,
+): Promise<ClaimSource[]> {
   const { data, error } = await client
     .from("claim_sources")
     .select(LINK_COLUMNS)

@@ -67,7 +67,7 @@ export function SourceFilterBar({
     <section aria-label="Search and filter sources" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end gap-3">
         <div className="flex min-w-56 flex-1 flex-col gap-1">
-          <label htmlFor="source-search" className="text-xs font-medium text-ink-muted">
+          <label htmlFor="source-search" className="text-ink-muted text-xs font-medium">
             Search sources
           </label>
           <input
@@ -79,11 +79,13 @@ export function SourceFilterBar({
             className={`${CONTROL} w-full`}
           />
         </div>
-        <label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+        <label className="text-ink-muted flex flex-col gap-1 text-xs font-medium">
           Review status
           <select
             value={query.review ?? ""}
-            onChange={(event) => onChange({ review: (event.target.value || null) as ReviewStatus | null })}
+            onChange={(event) =>
+              onChange({ review: (event.target.value || null) as ReviewStatus | null })
+            }
             className={`${CONTROL} text-ink`}
           >
             <option value="">All statuses</option>
@@ -94,11 +96,13 @@ export function SourceFilterBar({
             ))}
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+        <label className="text-ink-muted flex flex-col gap-1 text-xs font-medium">
           Type
           <select
             value={query.type ?? ""}
-            onChange={(event) => onChange({ type: (event.target.value || null) as SourceType | null })}
+            onChange={(event) =>
+              onChange({ type: (event.target.value || null) as SourceType | null })
+            }
             className={`${CONTROL} text-ink`}
           >
             <option value="">All types</option>
@@ -110,11 +114,13 @@ export function SourceFilterBar({
           </select>
         </label>
         {showRelation ? (
-          <label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+          <label className="text-ink-muted flex flex-col gap-1 text-xs font-medium">
             Relation
             <select
               value={query.relation ?? ""}
-              onChange={(event) => onChange({ relation: (event.target.value || null) as Relation | null })}
+              onChange={(event) =>
+                onChange({ relation: (event.target.value || null) as Relation | null })
+              }
               className={`${CONTROL} text-ink`}
             >
               <option value="">All relations</option>
@@ -126,7 +132,7 @@ export function SourceFilterBar({
             </select>
           </label>
         ) : null}
-        <label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+        <label className="text-ink-muted flex flex-col gap-1 text-xs font-medium">
           Sort by
           <select
             value={query.sort}
@@ -151,7 +157,7 @@ export function SourceFilterBar({
         </label>
       </div>
       <div className="flex items-center justify-between gap-3">
-        <p role="status" className="text-sm text-ink-muted">
+        <p role="status" className="text-ink-muted text-sm">
           Showing {resultCount} of {totalCount} {totalCount === 1 ? "source" : "sources"}
         </p>
         {activeFilters > 0 ? (

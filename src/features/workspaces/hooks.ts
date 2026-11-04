@@ -30,7 +30,8 @@ export function useWorkspace(workspaceId: string) {
 export function useCreateWorkspace() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (values: WorkspaceFormValues) => createWorkspace(getSupabaseBrowserClient(), values),
+    mutationFn: (values: WorkspaceFormValues) =>
+      createWorkspace(getSupabaseBrowserClient(), values),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.workspaces() }),
   });
 }

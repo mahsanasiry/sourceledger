@@ -31,7 +31,10 @@ describe("evidence helpers", () => {
   });
 
   it("tallies relations per claim, including claims without links", () => {
-    const tallies = tallyClaims([makeClaim(), makeClaim({ id: "c2" }), makeClaim({ id: "c3" })], links);
+    const tallies = tallyClaims(
+      [makeClaim(), makeClaim({ id: "c2" }), makeClaim({ id: "c3" })],
+      links,
+    );
     expect(tallies.get("c1")).toEqual({ supports: 1, contradicts: 1, context: 0 });
     expect(tallies.get("c3")).toEqual({ supports: 0, contradicts: 0, context: 0 });
   });

@@ -38,23 +38,25 @@ function displayValue(field: string, value: unknown): string {
 function ActivityEntry({ entry }: { entry: Activity }) {
   const changes = Object.entries(entry.changes);
   return (
-    <li className="rounded-lg border border-line bg-surface p-4">
+    <li className="border-line bg-surface rounded-lg border p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <p className="text-sm font-medium">{entry.summary}</p>
-        <time dateTime={entry.created_at} className="text-xs text-ink-muted">
+        <time dateTime={entry.created_at} className="text-ink-muted text-xs">
           {formatDateTime(entry.created_at)}
         </time>
       </div>
-      <p className="mt-1 text-xs text-ink-muted">By {entry.actor_email ?? "an unknown user"}</p>
+      <p className="text-ink-muted mt-1 text-xs">By {entry.actor_email ?? "an unknown user"}</p>
       {changes.length > 0 ? (
         <dl className="mt-3 flex flex-col gap-2 text-sm">
           {changes.map(([field, change]) => (
             <div key={field}>
-              <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+              <dt className="text-ink-muted text-xs font-semibold tracking-wide uppercase">
                 {FIELD_LABELS[field] ?? field}
               </dt>
               <dd className="mt-0.5">
-                <span className="text-ink-muted line-through">{displayValue(field, change.from)}</span>
+                <span className="text-ink-muted line-through">
+                  {displayValue(field, change.from)}
+                </span>
                 <span aria-hidden="true"> → </span>
                 <span className="sr-only"> changed to </span>
                 <span>{displayValue(field, change.to)}</span>
@@ -64,7 +66,7 @@ function ActivityEntry({ entry }: { entry: Activity }) {
         </dl>
       ) : null}
       {entry.reason ? (
-        <p className="mt-3 rounded-md bg-surface-muted px-3 py-2 text-sm">
+        <p className="bg-surface-muted mt-3 rounded-md px-3 py-2 text-sm">
           <span className="font-medium">Reason: </span>
           {entry.reason}
         </p>
@@ -80,7 +82,13 @@ export function ActivityList({ workspaceId, scope, emptyText }: ActivityListProp
 
   if (activity.isPending) return <LoadingState label="Loading history" />;
   if (activity.isError) {
-    return <ErrorState error={activity.error} onRetry={() => activity.refetch()} title="History did not load" />;
+    return (
+      <ErrorState
+        error={activity.error}
+        onRetry={() => activity.refetch()}
+        title="History did not load"
+      />
+    );
   }
   if (activity.data.length === 0) {
     return (

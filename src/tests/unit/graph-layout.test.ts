@@ -42,7 +42,10 @@ describe("buildGraphLayout", () => {
   });
 
   it("narrows by relation and drops sources that no longer connect", () => {
-    const layout = buildGraphLayout(claims, sources, links, { claimId: null, relation: "supports" });
+    const layout = buildGraphLayout(claims, sources, links, {
+      claimId: null,
+      relation: "supports",
+    });
     expect(layout.edges).toHaveLength(1);
     expect(layout.nodes.some((node) => node.id === sourceNodeId("s3"))).toBe(false);
   });
@@ -52,7 +55,9 @@ describe("buildGraphLayout", () => {
       makeSource({ id: `x${index}`, title: `Source ${String(index).padStart(3, "0")}` }),
     );
     const layout = buildGraphLayout([makeClaim()], many, [], noFilter);
-    const columns = new Set(layout.nodes.filter((node) => node.data.kind === "source").map((n) => n.x));
+    const columns = new Set(
+      layout.nodes.filter((node) => node.data.kind === "source").map((n) => n.x),
+    );
     expect(columns.size).toBe(4);
     const maxY = Math.max(...layout.nodes.map((node) => node.y));
     expect(maxY).toBeLessThan(ROWS_PER_COLUMN * 100);

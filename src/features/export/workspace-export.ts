@@ -1,10 +1,4 @@
-import type {
-  Activity,
-  Claim,
-  ClaimSource,
-  Source,
-  Workspace,
-} from "@/lib/validation/schemas";
+import type { Activity, Claim, ClaimSource, Source, Workspace } from "@/lib/validation/schemas";
 import { toCsv } from "./csv";
 
 export type WorkspaceSnapshot = {

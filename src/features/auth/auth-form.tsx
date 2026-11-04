@@ -37,7 +37,9 @@ export function AuthForm({ mode, next }: AuthFormProps) {
       } else {
         const { data, error } = await client.auth.signUp({
           ...values,
-          options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(destination)}` },
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(destination)}`,
+          },
         });
         if (error) throw error;
         if (!data.session) {
@@ -54,10 +56,11 @@ export function AuthForm({ mode, next }: AuthFormProps) {
 
   if (confirmationSentTo) {
     return (
-      <div role="status" className="rounded-lg border border-line bg-surface p-5 text-sm">
+      <div role="status" className="border-line bg-surface rounded-lg border p-5 text-sm">
         <h2 className="font-semibold">Check your email</h2>
-        <p className="mt-1 text-ink-muted">
-          We sent a confirmation link to {confirmationSentTo}. Open it to finish creating your account.
+        <p className="text-ink-muted mt-1">
+          We sent a confirmation link to {confirmationSentTo}. Open it to finish creating your
+          account.
         </p>
       </div>
     );
@@ -87,9 +90,9 @@ export function AuthForm({ mode, next }: AuthFormProps) {
       <Button type="submit" loading={isSubmitting}>
         {isLogin ? "Sign in" : "Create account"}
       </Button>
-      <p className="text-sm text-ink-muted">
+      <p className="text-ink-muted text-sm">
         {isLogin ? "New here? " : "Already have an account? "}
-        <Link href={isLogin ? "/signup" : "/login"} className="font-medium text-accent underline">
+        <Link href={isLogin ? "/signup" : "/login"} className="text-accent font-medium underline">
           {isLogin ? "Create an account" : "Sign in"}
         </Link>
       </p>

@@ -41,7 +41,8 @@ function useRefreshEvidence(workspaceId: string) {
 export function useCreateClaim(workspaceId: string) {
   const refresh = useRefreshEvidence(workspaceId);
   return useMutation({
-    mutationFn: (values: ClaimFormValues) => createClaim(getSupabaseBrowserClient(), workspaceId, values),
+    mutationFn: (values: ClaimFormValues) =>
+      createClaim(getSupabaseBrowserClient(), workspaceId, values),
     onSuccess: refresh,
   });
 }
@@ -49,7 +50,8 @@ export function useCreateClaim(workspaceId: string) {
 export function useUpdateClaim(workspaceId: string, claimId: string) {
   const refresh = useRefreshEvidence(workspaceId);
   return useMutation({
-    mutationFn: (values: ClaimFormValues) => updateClaim(getSupabaseBrowserClient(), claimId, values),
+    mutationFn: (values: ClaimFormValues) =>
+      updateClaim(getSupabaseBrowserClient(), claimId, values),
     onSuccess: refresh,
   });
 }
