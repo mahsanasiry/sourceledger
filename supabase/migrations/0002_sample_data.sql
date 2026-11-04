@@ -119,7 +119,7 @@ begin
 end;
 $$;
 
-revoke all on function seed_sample_workspace(uuid) from public;
+revoke all on function seed_sample_workspace(uuid) from public, anon, authenticated;
 
 create function create_sample_workspace() returns uuid
 language plpgsql security definer set search_path = public as $$
@@ -131,7 +131,7 @@ begin
 end;
 $$;
 
-revoke all on function create_sample_workspace() from public;
+revoke all on function create_sample_workspace() from public, anon;
 grant execute on function create_sample_workspace() to authenticated;
 
 create function seed_workspace_for_new_user() returns trigger
@@ -144,3 +144,5 @@ $$;
 
 create trigger on_auth_user_created after insert on auth.users
   for each row execute function seed_workspace_for_new_user();
+
+revoke all on function seed_workspace_for_new_user() from public, anon, authenticated;
