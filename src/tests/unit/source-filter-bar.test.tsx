@@ -83,4 +83,49 @@ describe("SourceFilterBar", () => {
     const { container } = setup();
     await expectNoAccessibilityViolations(container);
   });
+
+  it("keeps what is typed while the url is still catching up", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const { rerender } = setup();
+    const input = screen.getByLabelText("Search sources");
+
+    await user.type(input, "s");
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+    await user.type(input, "u");
+    expect(input).toHaveValue("su");
+
+    rerender(
+      <SourceFilterBar
+        query={{ ...DEFAULT_SOURCE_QUERY, q: "s" }}
+        resultCount={1}
+        totalCount={5}
+        showRelation
+        onChange={vi.fn()}
+      />,
+    );
+    expect(input).toHaveValue("su");
+  });
+
+  it("keeps a trailing space while the url holds the trimmed text", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const { rerender } = setup();
+    const input = screen.getByLabelText("Search sources");
+
+    await user.type(input, "bike ");
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+    rerender(
+      <SourceFilterBar
+        query={{ ...DEFAULT_SOURCE_QUERY, q: "bike" }}
+        resultCount={1}
+        totalCount={5}
+        showRelation
+        onChange={vi.fn()}
+      />,
+    );
+    expect(input).toHaveValue("bike ");
+  });
 });

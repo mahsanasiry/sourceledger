@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { CLAIM_LABELS, ClaimStatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
+import { SearchInput } from "@/components/ui/search-input";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
 import { tallyClaims } from "@/features/evidence/evidence";
@@ -70,19 +71,13 @@ export function ClaimsView({ workspaceId }: { workspaceId: string }) {
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="flex flex-wrap items-end gap-3">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="claim-search" className="text-ink-muted text-xs font-medium">
-              Search claims
-            </label>
-            <input
-              id="claim-search"
-              type="search"
-              defaultValue={q}
-              key={q}
-              onChange={(event) => setParams({ q: event.target.value }, "replace")}
-              className="border-line bg-surface min-h-10 w-64 rounded-md border px-3 text-sm"
-            />
-          </div>
+          <SearchInput
+            id="claim-search"
+            label="Search claims"
+            value={q}
+            className="border-line bg-surface min-h-10 w-64 rounded-md border px-3 text-sm"
+            onCommit={(next) => setParams({ q: next }, "replace")}
+          />
           <label className="text-ink-muted flex flex-col gap-1 text-xs font-medium">
             Status
             <select

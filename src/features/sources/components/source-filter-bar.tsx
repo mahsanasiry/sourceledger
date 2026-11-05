@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { REVIEW_LABELS, RELATION_LABELS } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SearchInput } from "@/components/ui/search-input";
 import {
   RELATIONS,
   REVIEW_STATUSES,
@@ -44,41 +44,19 @@ export function SourceFilterBar({
   showRelation,
   onChange,
 }: SourceFilterBarProps) {
-  const [draft, setDraft] = useState(query.q);
-  const [committed, setCommitted] = useState(query.q);
-
-  if (query.q !== committed) {
-    setCommitted(query.q);
-    setDraft(query.q);
-  }
-
-  useEffect(() => {
-    if (draft === committed) return;
-    const timer = window.setTimeout(() => {
-      setCommitted(draft);
-      onChange({ q: draft }, { history: "replace" });
-    }, 300);
-    return () => window.clearTimeout(timer);
-  }, [draft, committed, onChange]);
-
   const activeFilters = countActiveFilters(query);
 
   return (
     <section aria-label="Search and filter sources" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end gap-3">
-        <div className="flex min-w-56 flex-1 flex-col gap-1">
-          <label htmlFor="source-search" className="text-ink-muted text-xs font-medium">
-            Search sources
-          </label>
-          <input
-            id="source-search"
-            type="search"
-            value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-            placeholder="Title, address, note or excerpt"
-            className={`${CONTROL} w-full`}
-          />
-        </div>
+        <SearchInput
+          id="source-search"
+          label="Search sources"
+          value={query.q}
+          placeholder="Title, address, note or excerpt"
+          className={`${CONTROL} w-full`}
+          onCommit={(q) => onChange({ q }, { history: "replace" })}
+        />
         <label className="text-ink-muted flex flex-col gap-1 text-xs font-medium">
           Review status
           <select
