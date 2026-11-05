@@ -14,9 +14,10 @@ There are no automatic imports and no AI features. Everything in the workspace i
 
 ## Screenshots
 
-<!-- Add screenshots to docs/screenshots and link them here: evidence file, source panel, graph, history. -->
-
-_Screenshots go here._
+![Evidence file](docs/screenshots/evidence-file.png)
+![Sources with filters](docs/screenshots/sources-filters.png)
+![Evidence graph](docs/screenshots/graph.png)
+![History](docs/screenshots/history.png)
 
 ## Features
 
