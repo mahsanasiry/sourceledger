@@ -1,5 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 
+try {
+  process.loadEnvFile(".env.local");
+} catch {
+  // The file is optional: CI passes the variables directly.
+}
+
 const port = Number(process.env.PORT ?? 3000);
 
 export default defineConfig({
@@ -13,7 +19,7 @@ export default defineConfig({
     baseURL: `http://localhost:${port}`,
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"], channel: "chrome" } }],
   webServer: {
     command: process.env.CI ? "npm run start" : "npm run dev",
     url: `http://localhost:${port}`,

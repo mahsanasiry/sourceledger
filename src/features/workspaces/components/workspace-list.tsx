@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
@@ -12,6 +13,7 @@ import { useCreateSampleWorkspace, useCreateWorkspace, useWorkspaces } from "../
 import { WorkspaceForm } from "./workspace-form";
 
 export function WorkspaceList() {
+  const router = useRouter();
   const toast = useToast();
   const workspaces = useWorkspaces();
   const create = useCreateWorkspace();
@@ -85,9 +87,10 @@ export function WorkspaceList() {
           onCancel={() => setCreating(false)}
           onSubmit={(values) =>
             create.mutate(values, {
-              onSuccess: () => {
+              onSuccess: (workspace) => {
                 setCreating(false);
                 toast.success("Workspace created");
+                router.push(`/workspaces/${workspace.id}`);
               },
             })
           }
