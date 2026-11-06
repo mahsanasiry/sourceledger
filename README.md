@@ -12,7 +12,27 @@ Each claim has an evidence file: supporting, contradicting and context sources s
 
 There are no automatic imports and no AI features. Everything in the workspace is entered and judged by a person.
 
-**Live demo:** https://sourceledger.mahsanasiry0.workers.dev
+## Try it
+
+Live demo: https://sourceledger.mahsanasiry0.workers.dev
+
+Sign in with the demo account, or create your own account (every new account gets its own sample workspace).
+
+- Email: test@gmail.com
+- Password: test1234
+
+The demo account is shared, so other visitors may change its data. Settings has a button that adds a fresh sample workspace.
+
+## Problems this project solves
+
+- **History you can audit.** Every change to a claim, source or link is written to a history table by database triggers, with the author taken from the signed-in session and the reason supplied by the user. Clients cannot edit or delete history entries.
+- **Access control that does not depend on the client.** Row Level Security policies restrict every table to the owner of the workspace, and composite foreign keys stop a link from joining a claim and a source from different workspaces.
+- **State that survives refresh and Back.** Search, filters, sort order and the open source live in the URL. Parsing and serialising are pure functions covered by unit tests.
+- **Failure handled in the open.** Flagging a source updates the screen immediately and rolls back if the request fails. Forms explain what is wrong, and lists have loading, empty, error and retry states.
+
+## Testing at a glance
+
+59 unit and component tests, accessibility checks with axe-core, and end-to-end tests in a real browser. CI runs lint, typecheck, formatting, tests and the build on every pull request.
 
 ## Screenshots
 
