@@ -12,6 +12,8 @@ Each claim has an evidence file: supporting, contradicting and context sources s
 
 There are no automatic imports and no AI features. Everything in the workspace is entered and judged by a person.
 
+**Live demo:** https://sourceledger.mahsanasiry0.workers.dev
+
 ## Screenshots
 
 ![Evidence file](docs/screenshots/evidence-file.png)
