@@ -36,8 +36,8 @@ The demo account is shared, so other visitors may change its data. Settings has 
 
 ## Screenshots
 
-![Evidence file](docs/screenshots/evidence-file.png)
-![Sources with filters](docs/screenshots/sources-filters.png)
+![Evidence file](docs/screenshots/evidence.png)
+![Sources with filters](docs/screenshots/sources.png)
 ![Evidence graph](docs/screenshots/graph.png)
 ![History](docs/screenshots/history.png)
 
