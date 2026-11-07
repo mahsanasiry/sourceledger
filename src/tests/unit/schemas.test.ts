@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   authFormSchema,
   claimFormSchema,
+  linkExistingFormSchema,
   reviewFormSchema,
   sourceFormSchema,
 } from "@/lib/validation/schemas";
@@ -52,6 +53,21 @@ describe("form schemas", () => {
       reason: "",
     });
     expect(result.success).toBe(false);
+  });
+
+  it("requires a source when linking an existing one", () => {
+    expect(
+      linkExistingFormSchema.safeParse({ source_id: "", relation: "supports", relation_note: "" })
+        .success,
+    ).toBe(false);
+    expect(
+      linkExistingFormSchema.safeParse({ source_id: "s1", relation: "context", relation_note: "" })
+        .success,
+    ).toBe(true);
+    expect(
+      linkExistingFormSchema.safeParse({ source_id: "s1", relation: "unknown", relation_note: "" })
+        .success,
+    ).toBe(false);
   });
 
   it("validates email and password length", () => {

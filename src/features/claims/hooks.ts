@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query/keys";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import type { ClaimFormValues, LinkFormValues } from "@/lib/validation/schemas";
+import type { ClaimFormValues, LinkFormValues, Relation } from "@/lib/validation/schemas";
 import {
   createClaim,
   deleteClaim,
@@ -78,6 +78,24 @@ export function useRemoveLink(workspaceId: string) {
   return useMutation({
     mutationFn: (input: { claimId: string; sourceId: string }) =>
       removeLink(getSupabaseBrowserClient(), input.claimId, input.sourceId),
+    onSuccess: refresh,
+  });
+}
+
+export function useLinkExistingSource(workspaceId: string) {
+  const refresh = useRefreshEvidence(workspaceId);
+  return useMutation({
+    mutationFn: (input: {
+      claimId: string;
+      sourceId: string;
+      relation: Relation;
+      relationNote: string;
+    }) =>
+      upsertLink(getSupabaseBrowserClient(), workspaceId, input.sourceId, {
+        claim_id: input.claimId,
+        relation: input.relation,
+        relation_note: input.relationNote,
+      }),
     onSuccess: refresh,
   });
 }

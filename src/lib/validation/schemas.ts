@@ -163,6 +163,13 @@ export const linkFormSchema = z.object({
 });
 export type LinkFormValues = z.infer<typeof linkFormSchema>;
 
+export const linkExistingFormSchema = z.object({
+  source_id: z.string().min(1, "Choose a source"),
+  relation: z.enum(RELATIONS),
+  relation_note: optionalText(2000),
+});
+export type LinkExistingFormValues = z.infer<typeof linkExistingFormSchema>;
+
 export const authFormSchema = z.object({
   email: z.string().trim().min(1, "Enter your email").pipe(z.email("Enter a valid email address")),
   password: z.string().min(8, "Use at least 8 characters").max(72, "Use at most 72 characters"),

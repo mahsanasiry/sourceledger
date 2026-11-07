@@ -10,7 +10,11 @@ import { EmptyState, ErrorState, InlineError, LoadingState } from "@/components/
 import { useToast } from "@/components/ui/toast";
 import { ActivityList } from "@/features/activity/components/activity-list";
 import { EvidenceBoard } from "@/features/evidence/components/evidence-board";
-import { groupByRelation, linkedSourcesForClaim } from "@/features/evidence/evidence";
+import {
+  groupByRelation,
+  linkedSourcesForClaim,
+  sourcesNotLinkedTo,
+} from "@/features/evidence/evidence";
 import { SourceDetailPanel } from "@/features/sources/components/source-detail-panel";
 import { SourceFilterBar } from "@/features/sources/components/source-filter-bar";
 import { SourceForm } from "@/features/sources/components/source-form";
@@ -18,8 +22,15 @@ import { LinkAfterCreateError, useCreateSource, useSources } from "@/features/so
 import { filterSources, sortSources } from "@/features/sources/source-query";
 import { toUserMessage } from "@/lib/utils/errors";
 import { useSourceQueryState } from "@/lib/utils/use-url-state";
-import { useClaims, useDeleteClaim, useLinks, useUpdateClaim } from "../hooks";
+import {
+  useClaims,
+  useDeleteClaim,
+  useLinkExistingSource,
+  useLinks,
+  useUpdateClaim,
+} from "../hooks";
 import { ClaimForm } from "./claim-form";
+import { LinkExistingSourceForm } from "./link-existing-source-form";
 
 export function ClaimEvidenceFile({
   workspaceId,
@@ -40,6 +51,8 @@ export function ClaimEvidenceFile({
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [addingSource, setAddingSource] = useState(false);
+  const [linkingExisting, setLinkingExisting] = useState(false);
+  const linkExisting = useLinkExistingSource(workspaceId);
 
   const claim = claims.data?.find((entry) => entry.id === claimId);
 
@@ -52,6 +65,13 @@ export function ClaimEvidenceFile({
     [linked, query],
   );
   const columns = useMemo(() => groupByRelation(visible), [visible]);
+  const candidates = useMemo(
+    () =>
+      sourcesNotLinkedTo(claimId, links.data ?? [], sources.data ?? []).sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
+      ),
+    [claimId, links.data, sources.data],
+  );
 
   if (claims.isPending || sources.isPending || links.isPending) {
     return <LoadingState label="Loading evidence file" />;
@@ -90,6 +110,10 @@ export function ClaimEvidenceFile({
     ? sources.data.find((source) => source.id === query.selected)
     : undefined;
   const closePanel = () => update({ selected: null });
+  const closeLinkExisting = () => {
+    setLinkingExisting(false);
+    linkExisting.reset();
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -120,7 +144,12 @@ export function ClaimEvidenceFile({
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Evidence</h2>
-        <Button onClick={() => setAddingSource(true)}>Add source</Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" onClick={() => setLinkingExisting(true)}>
+            Link existing source
+          </Button>
+          <Button onClick={() => setAddingSource(true)}>Add source</Button>
+        </div>
       </div>
 
       <SourceFilterBar
@@ -221,6 +250,46 @@ export function ClaimEvidenceFile({
             Delete claim
           </Button>
         </div>
+      </Modal>
+
+      <Modal open={linkingExisting} title="Link an existing source" onClose={closeLinkExisting}>
+        {candidates.length === 0 ? (
+          <>
+            <p className="text-sm">
+              Every source in this workspace is already linked to this claim. Add a new source
+              instead.
+            </p>
+            <div className="mt-4 flex justify-end">
+              <Button variant="secondary" onClick={closeLinkExisting}>
+                Close
+              </Button>
+            </div>
+          </>
+        ) : (
+          <LinkExistingSourceForm
+            candidates={candidates}
+            submitting={linkExisting.isPending}
+            error={linkExisting.error}
+            onCancel={closeLinkExisting}
+            onSubmit={(values) =>
+              linkExisting.mutate(
+                {
+                  claimId,
+                  sourceId: values.source_id,
+                  relation: values.relation,
+                  relationNote: values.relation_note,
+                },
+                {
+                  onSuccess: () => {
+                    closeLinkExisting();
+                    toast.success("Source linked");
+                    update({ selected: values.source_id });
+                  },
+                },
+              )
+            }
+          />
+        )}
       </Modal>
 
       <Modal open={addingSource} title="Add a source" onClose={() => setAddingSource(false)}>
