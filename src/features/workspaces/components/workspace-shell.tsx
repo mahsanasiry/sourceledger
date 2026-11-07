@@ -69,22 +69,26 @@ export function WorkspaceShell({
             ) : null}
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button
-              variant="secondary"
-              loading={exporter.isPending && exporter.variables === "json"}
-              disabled={exporter.isPending}
-              onClick={() => exportTo("json")}
-            >
-              Export JSON
-            </Button>
-            <Button
-              variant="secondary"
-              loading={exporter.isPending && exporter.variables === "csv"}
-              disabled={exporter.isPending}
-              onClick={() => exportTo("csv")}
-            >
-              Export CSV
-            </Button>
+            <div role="group" aria-label="Export workspace" className="inline-flex">
+              <Button
+                variant="secondary"
+                className="rounded-r-none"
+                loading={exporter.isPending && exporter.variables === "json"}
+                disabled={exporter.isPending}
+                onClick={() => exportTo("json")}
+              >
+                Export JSON
+              </Button>
+              <Button
+                variant="secondary"
+                className="-ml-px rounded-l-none"
+                loading={exporter.isPending && exporter.variables === "csv"}
+                disabled={exporter.isPending}
+                onClick={() => exportTo("csv")}
+              >
+                Export CSV
+              </Button>
+            </div>
             <Button variant="secondary" onClick={() => setEditing(true)}>
               Rename
             </Button>
@@ -157,7 +161,7 @@ export function WorkspaceShell({
             Keep workspace
           </Button>
           <Button
-            variant="danger"
+            variant="destructive"
             loading={remove.isPending}
             onClick={() =>
               remove.mutate(workspaceId, {

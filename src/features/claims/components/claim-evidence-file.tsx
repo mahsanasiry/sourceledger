@@ -236,7 +236,7 @@ export function ClaimEvidenceFile({
             Keep claim
           </Button>
           <Button
-            variant="danger"
+            variant="destructive"
             loading={deleteClaim.isPending}
             onClick={() =>
               deleteClaim.mutate(claimId, {

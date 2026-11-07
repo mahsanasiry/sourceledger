@@ -2,12 +2,13 @@ import { cn } from "@/lib/utils/cn";
 import type { ButtonHTMLAttributes } from "react";
 import { Spinner } from "./spinner";
 
-type Variant = "primary" | "secondary" | "danger" | "ghost";
+type Variant = "primary" | "secondary" | "danger" | "destructive" | "ghost";
 
 const VARIANTS: Record<Variant, string> = {
   primary: "bg-accent text-accent-ink hover:opacity-90",
   secondary: "border border-line bg-surface text-ink hover:bg-surface-muted",
-  danger: "bg-contradict text-white hover:opacity-90",
+  danger: "border border-contradict bg-surface text-contradict hover:bg-contradict-soft",
+  destructive: "bg-contradict text-white hover:opacity-90",
   ghost: "text-ink hover:bg-surface-muted",
 };
 

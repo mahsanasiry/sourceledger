@@ -13,6 +13,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { memo, useMemo } from "react";
+import { ClaimStatusBadge, FlagBadge, ReviewBadge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils/cn";
 import type { Relation } from "@/lib/validation/schemas";
 import { buildGraphLayout, type GraphFilter, type GraphNodeData } from "../graph-layout";
@@ -20,17 +21,10 @@ import type { Claim, ClaimSource, Source } from "@/lib/validation/schemas";
 
 const LARGE_GRAPH = 80;
 
-const EDGE_STYLES: Record<Relation, { stroke: string; strokeDasharray?: string }> = {
+export const EDGE_STYLES: Record<Relation, { stroke: string; strokeDasharray?: string }> = {
   supports: { stroke: "var(--support)" },
   contradicts: { stroke: "var(--contradict)", strokeDasharray: "8 4" },
   context: { stroke: "var(--context)", strokeDasharray: "2 4" },
-};
-
-const REVIEW_RING: Record<string, string> = {
-  verified: "border-support",
-  rejected: "border-contradict",
-  in_review: "border-warning",
-  unreviewed: "border-line",
 };
 
 type GraphFlowNode = Node<GraphNodeData>;
@@ -41,15 +35,20 @@ const GraphNodeView = memo(function GraphNodeView({ data, selected }: NodeProps<
     <div
       className={cn(
         "bg-surface w-64 rounded-lg border-2 px-3 py-2 text-left text-xs shadow-sm",
-        isClaim ? "border-accent" : data.kind === "source" ? REVIEW_RING[data.review] : "",
+        isClaim ? "border-accent" : "border-line",
         selected ? "ring-focus ring-2" : "",
       )}
     >
       <Handle type="target" position={Position.Left} isConnectable={false} className="opacity-0" />
       <p className="text-ink-muted mb-0.5 font-semibold tracking-wide uppercase">
-        {isClaim ? "Claim" : data.kind === "source" && data.flagged ? "Source · flagged" : "Source"}
+        {isClaim ? "Claim" : "Source"}
       </p>
       <p className="line-clamp-2 text-sm leading-snug font-medium">{data.label}</p>
+      <p className="mt-1.5 flex flex-wrap gap-1.5">
+        {data.kind === "claim" ? <ClaimStatusBadge status={data.status} /> : null}
+        {data.kind === "source" ? <ReviewBadge status={data.review} /> : null}
+        {data.kind === "source" && data.flagged ? <FlagBadge /> : null}
+      </p>
       <Handle type="source" position={Position.Right} isConnectable={false} className="opacity-0" />
     </div>
   );

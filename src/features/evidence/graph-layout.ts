@@ -1,6 +1,6 @@
 import type { Claim, ClaimSource, Relation, Source } from "@/lib/validation/schemas";
 
-export const ROW_GAP = 76;
+export const ROW_GAP = 120;
 export const COLUMN_GAP = 380;
 export const ROWS_PER_COLUMN = 24;
 

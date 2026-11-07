@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  ROW_GAP,
   ROWS_PER_COLUMN,
   buildGraphLayout,
   claimNodeId,
@@ -60,7 +61,7 @@ describe("buildGraphLayout", () => {
     );
     expect(columns.size).toBe(4);
     const maxY = Math.max(...layout.nodes.map((node) => node.y));
-    expect(maxY).toBeLessThan(ROWS_PER_COLUMN * 100);
+    expect(maxY).toBeLessThan(ROWS_PER_COLUMN * ROW_GAP);
   });
 
   it("ignores links that point at missing rows", () => {

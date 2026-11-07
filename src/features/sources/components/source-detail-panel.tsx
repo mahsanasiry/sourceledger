@@ -271,7 +271,7 @@ export function SourceDetailPanel({
             Keep source
           </Button>
           <Button
-            variant="danger"
+            variant="destructive"
             loading={remove.isPending}
             onClick={() =>
               remove.mutate(source.id, {

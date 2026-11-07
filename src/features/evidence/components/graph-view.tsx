@@ -9,8 +9,25 @@ import { useClaims, useLinks } from "@/features/claims/hooks";
 import { SourceDetailPanel } from "@/features/sources/components/source-detail-panel";
 import { useSources } from "@/features/sources/hooks";
 import { applyParamPatch } from "@/lib/utils/search-params";
-import { RELATIONS } from "@/lib/validation/schemas";
-import { EvidenceGraph } from "./evidence-graph";
+import { RELATIONS, type Relation } from "@/lib/validation/schemas";
+import { EDGE_STYLES, EvidenceGraph } from "./evidence-graph";
+
+function LegendLine({ relation }: { relation: Relation }) {
+  const style = EDGE_STYLES[relation];
+  return (
+    <svg width="32" height="8" aria-hidden="true">
+      <line
+        x1="0"
+        y1="4"
+        x2="32"
+        y2="4"
+        stroke={style.stroke}
+        strokeWidth="2"
+        strokeDasharray={style.strokeDasharray}
+      />
+    </svg>
+  );
+}
 
 export function GraphView({ workspaceId }: { workspaceId: string }) {
   const router = useRouter();
@@ -102,10 +119,17 @@ export function GraphView({ workspaceId }: { workspaceId: string }) {
         ) : null}
       </div>
 
-      <p className="text-ink-muted text-sm">
-        Solid lines support, dashed lines contradict, dotted lines give context. Select a claim to
-        focus on it, or a source to read its details.
-      </p>
+      <div className="text-ink-muted flex flex-col gap-1 text-sm">
+        <ul aria-label="Line legend" className="flex flex-wrap items-center gap-x-5 gap-y-1">
+          {RELATIONS.map((value) => (
+            <li key={value} className="flex items-center gap-2">
+              <LegendLine relation={value} />
+              {RELATION_LABELS[value]}
+            </li>
+          ))}
+        </ul>
+        <p>Select a claim to focus on it, or a source to read its details.</p>
+      </div>
 
       <div className={selected ? "grid gap-6 xl:grid-cols-[1fr_28rem]" : ""}>
         <EvidenceGraph

@@ -1,11 +1,11 @@
 "use client";
 
-import { REVIEW_LABELS } from "@/components/ui/badge";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/states";
 import { formatDateTime } from "@/lib/utils/dates";
 import type { Activity } from "@/lib/validation/schemas";
 import { useActivity } from "../hooks";
 import type { ActivityScope } from "../api";
+import { describeChange } from "../describe-change";
 
 const FIELD_LABELS: Record<string, string> = {
   statement: "Claim",
@@ -25,16 +25,6 @@ const FIELD_LABELS: Record<string, string> = {
   description: "Description",
 };
 
-function displayValue(field: string, value: unknown): string {
-  if (value === null || value === undefined || value === "") return "empty";
-  if (field === "review_status" && typeof value === "string" && value in REVIEW_LABELS) {
-    return REVIEW_LABELS[value as keyof typeof REVIEW_LABELS];
-  }
-  if (field === "flagged") return value ? "flagged" : "not flagged";
-  const text = String(value);
-  return text.length > 160 ? `${text.slice(0, 160)}…` : text;
-}
-
 function ActivityEntry({ entry }: { entry: Activity }) {
   const changes = Object.entries(entry.changes);
   return (
@@ -45,24 +35,37 @@ function ActivityEntry({ entry }: { entry: Activity }) {
           {formatDateTime(entry.created_at)}
         </time>
       </div>
-      <p className="text-ink-muted mt-1 text-xs">By {entry.actor_email ?? "an unknown user"}</p>
+      <p className="text-ink-muted mt-1 text-xs">By {entry.actor_email ?? "the system"}</p>
       {changes.length > 0 ? (
         <dl className="mt-3 flex flex-col gap-2 text-sm">
-          {changes.map(([field, change]) => (
-            <div key={field}>
-              <dt className="text-ink-muted text-xs font-semibold tracking-wide uppercase">
-                {FIELD_LABELS[field] ?? field}
-              </dt>
-              <dd className="mt-0.5">
-                <span className="text-ink-muted line-through">
-                  {displayValue(field, change.from)}
-                </span>
-                <span aria-hidden="true"> → </span>
-                <span className="sr-only"> changed to </span>
-                <span>{displayValue(field, change.to)}</span>
-              </dd>
-            </div>
-          ))}
+          {changes.map(([field, change]) => {
+            const description = describeChange(field, change.from, change.to);
+            if (!description) return null;
+            return (
+              <div key={field}>
+                <dt className="text-ink-muted text-xs font-semibold tracking-wide uppercase">
+                  {FIELD_LABELS[field] ?? field}
+                </dt>
+                <dd className="mt-0.5">
+                  {description.kind === "changed" ? (
+                    <>
+                      <span className="text-ink-muted line-through">{description.from}</span>
+                      <span aria-hidden="true"> → </span>
+                      <span className="sr-only"> changed to </span>
+                      <span>{description.to}</span>
+                    </>
+                  ) : null}
+                  {description.kind === "set" ? <span>{description.to}</span> : null}
+                  {description.kind === "removed" ? (
+                    <>
+                      <span className="text-ink-muted line-through">{description.from}</span>
+                      <span> (removed)</span>
+                    </>
+                  ) : null}
+                </dd>
+              </div>
+            );
+          })}
         </dl>
       ) : null}
       {entry.reason ? (
