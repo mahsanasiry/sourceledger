@@ -32,7 +32,7 @@ The demo account is shared, so other visitors may change its data. Settings has 
 
 ## Testing at a glance
 
-59 unit and component tests, accessibility checks with axe-core, and end-to-end tests in a real browser. CI runs lint, typecheck, formatting, tests and the build on every pull request.
+71 unit and component tests, accessibility checks with axe-core, and end-to-end tests in a real browser. CI runs lint, typecheck, formatting, tests and the build on every pull request.
 
 ## Screenshots
 
