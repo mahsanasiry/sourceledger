@@ -50,6 +50,7 @@ The demo account is shared, so other visitors may change its data. Settings has 
 - Evidence board: three columns per claim, with a source detail panel beside it.
 - Search, filter and sort, all stored in the URL. Refresh, Back and Forward restore the exact state, including which source is open.
 - Review status per source (unreviewed, in review, verified, rejected). Changing it requires a reason.
+- Link an existing source to a claim from the claim page, choosing the relation and an optional reason. Sources that are already linked to the claim are not offered again.
 - Flagging a source for a second look, applied optimistically and rolled back if the request fails.
 - Audit trail for workspaces, claims, sources and links, written by database triggers so it cannot be skipped by the client.
 - Loading, empty, error, success and retry states on every screen.
